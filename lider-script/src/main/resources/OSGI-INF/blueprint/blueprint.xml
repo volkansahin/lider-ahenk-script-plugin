@@ -23,19 +23,39 @@
 		<property name="machineOriented" value="${plugin.machine.oriented}" />
 		<property name="userOriented" value="${plugin.user.oriented}" />
 		<property name="policyPlugin" value="${plugin.policy.plugin}" />
+		<property name="taskPlugin" value="${plugin.task.plugin}" />
+		<property name="usesFileTransfer" value="${plugin.uses.file.transfer}" />
 		<property name="xbased" value="${plugin.x.based}" />
 	</bean>
 
 	<!-- ICommand implementation is used to process a task execution -->
-	<service ref="ScriptCommand" interface="tr.org.liderahenk.lider.core.api.plugin.ICommand" />
-	<bean id="ScriptCommand" class="tr.org.liderahenk.script.commands.ScriptCommand">
+	<service ref="SaveScriptCommand" interface="tr.org.liderahenk.lider.core.api.plugin.ICommand" />
+	<bean id="SaveScriptCommand" class="tr.org.liderahenk.script.commands.SaveScriptCommand">
 		<property name="resultFactory" ref="resultFactory" />
 		<property name="pluginInfo" ref="pluginInfoImpl" />
-		<property name="logService" ref="logService" />
-		<property name="pluginDbService" ref="pluginDbService" />
+		<property name="dbService" ref="dbService" />
+	</bean>
+	
+	<service ref="DeleteScriptCommand" interface="tr.org.liderahenk.lider.core.api.plugin.ICommand" />
+	<bean id="DeleteScriptCommand" class="tr.org.liderahenk.script.commands.DeleteScriptCommand">
+		<property name="resultFactory" ref="resultFactory" />
+		<property name="pluginInfo" ref="pluginInfoImpl" />
+		<property name="dbService" ref="dbService" />
+	</bean>
+	
+	<service ref="ListScriptsCommand" interface="tr.org.liderahenk.lider.core.api.plugin.ICommand" />
+	<bean id="ListScriptsCommand" class="tr.org.liderahenk.script.commands.ListScriptsCommand">
+		<property name="resultFactory" ref="resultFactory" />
+		<property name="pluginInfo" ref="pluginInfoImpl" />
+		<property name="dbService" ref="dbService" />
+	</bean>
+	
+	<service ref="ExecuteScriptCommand" interface="tr.org.liderahenk.lider.core.api.plugin.ICommand" />
+	<bean id="ExecuteScriptCommand" class="tr.org.liderahenk.script.commands.ExecuteScriptCommand">
+		<property name="resultFactory" ref="resultFactory" />
+		<property name="pluginInfo" ref="pluginInfoImpl" />
 	</bean>
 
-	<reference id="pluginDbService" interface="tr.org.liderahenk.lider.core.api.persistence.IPluginDbService" />
-	<reference id="logService" interface="tr.org.liderahenk.lider.core.api.log.IOperationLogService" />
+	<reference id="dbService" interface="tr.org.liderahenk.lider.core.api.persistence.IPluginDbService" />
 	<reference id="resultFactory" interface="tr.org.liderahenk.lider.core.api.service.ICommandResultFactory" />
 </blueprint>
