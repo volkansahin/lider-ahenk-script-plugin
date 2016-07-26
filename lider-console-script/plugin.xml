@@ -2,112 +2,52 @@
 <?eclipse version="3.4"?>
 <plugin>
    
-   <extension
+	<extension
          point="org.eclipse.ui.commands">
-      <category
+		<category
             id="tr.org.liderahenk.liderconsole.commands.category"
             name="%commands.category">
-      </category>         
-      <command
+		</category>         
+		<command
             categoryId="tr.org.liderahenk.liderconsole.commands.category"
-            id="tr.org.liderahenk.liderconsole.commands.ScriptProfile"            
-            name="%command.profile">
-      </command>
-      <command
+            id="tr.org.liderahenk.liderconsole.commands.ScriptDefinition"            
+            name="%command.script.definition">
+		</command>
+		<command
             categoryId="tr.org.liderahenk.liderconsole.commands.category"
-            id="tr.org.liderahenk.liderconsole.commands.ScriptTask"            
-            name="%command.task">
-      </command>
-   </extension>
+            id="tr.org.liderahenk.liderconsole.commands.ExecuteScriptTask"            
+            name="%command.execute.script.task">
+		</command>
+	</extension>
    
-   <extension
+	<extension
        point="org.eclipse.ui.handlers">
 
-		<!-- Profile handler -->
+		<!-- Script definition handler -->
        	<handler
-            class="tr.org.liderahenk.script.handlers.ScriptProfileHandler"
-            commandId="tr.org.liderahenk.liderconsole.commands.ScriptProfile">
-           <!-- TODO Uncomment this after updating/fixing LiderSourceProvider -->
-		   <!-- <enabledWhen>
-				<and>
-		          <with
-		                variable="tr.org.liderahenk.liderconsole.core.sourceproviders.main.available">
-		             <equals
-		                   value="true">
-		             </equals>
-		          </with>
-				<with
-	                variable="tr.org.liderahenk.liderconsole.core.sourceproviders.main.isAhenkSelected">
-	             	<equals
-		                   value="true">
-		            </equals>
-	          	</with>
-		       </and>
-		    </enabledWhen> -->        
+            class="tr.org.liderahenk.script.handlers.ScriptDefinitionHandler"
+            commandId="tr.org.liderahenk.liderconsole.commands.ScriptDefinition">
       	</handler>
       	
       	<!-- Task handler -->
-       <handler
+		<handler
             class="tr.org.liderahenk.script.handlers.ExecuteScriptTaskHandler"
-            commandId="tr.org.liderahenk.liderconsole.commands.ScriptTask">
-           <!-- TODO Uncomment this after updating/fixing LiderSourceProvider -->
-		   <!-- <enabledWhen>
-				<and>
-		          <with
-		                variable="tr.org.liderahenk.liderconsole.core.sourceproviders.main.available">
-		             <equals
-		                   value="true">
-		             </equals>
-		          </with>
-				<with
-	                variable="tr.org.liderahenk.liderconsole.core.sourceproviders.main.isAhenkSelected">
-	             	<equals
-		                   value="true">
-		            </equals>
-	          	</with>
-		       </and>
-		    </enabledWhen> -->        
-      </handler>
+            commandId="tr.org.liderahenk.liderconsole.commands.ExecuteScriptTask">
+		</handler>
       
-  </extension>
+	</extension>
   
-  <extension
+	<extension
          point="org.eclipse.ui.menus">
 
-		<!-- Add menu command for "profile definition" dialog -->
+		<!-- Add menu command for script definition editor -->
 		<menuContribution
-            locationURI="menu:tr.org.liderahenk.liderconsole.menus.ProfileDefinition?after=additions">
+            locationURI="menu:tr.org.liderahenk.liderconsole.menus.LiderMain?after=additions">
  				<command
-                  commandId="tr.org.liderahenk.liderconsole.commands.ScriptProfile"
-                  id="tr.org.liderahenk.liderconsole.commands.ScriptProfile"
-                  tooltip="%command.profile">
-                  <!-- TODO Uncomment this after updating/fixing LiderSourceProvider -->
-				  <!-- <visibleWhen>
-					   <and>
-			                <iterate operator="or">		
-			                	<or>
-							  	<with
-					                variable="tr.org.liderahenk.liderconsole.core.sourceproviders.main.isSearchSelected">
-						             <equals
-						                   value="true">
-						             </equals>
-					          	</with>
-					          	<with
-					                variable="tr.org.liderahenk.liderconsole.core.sourceproviders.main.isEntrySelected">
-						             <equals
-						                   value="true">
-						             </equals>
-					          	</with>
-					        	</or>
-					        </iterate>
-							<with
-				                variable="tr.org.liderahenk.liderconsole.core.sourceproviders.main.isAhenkSelected">
-				             	<equals
-					                   value="true">
-					            </equals>
-				          	</with>
-					    </and>
-					</visibleWhen> -->               
+                  commandId="tr.org.liderahenk.liderconsole.commands.ScriptDefinition"
+                  id="tr.org.liderahenk.liderconsole.commands.ScriptDefinition"
+                  tooltip="%command.script.definition"
+                  icon="icons/16/script-definition.png">
            		</command>
 		</menuContribution>
       
@@ -116,44 +56,31 @@
       		allPopups="false"
             locationURI="popup:tr.org.liderahenk.liderconsole.menus.ApplyTask?after=additions">
  				<command
-                  commandId="tr.org.liderahenk.liderconsole.commands.ScriptTask"
-                  id="tr.org.liderahenk.liderconsole.commands.ScriptTask"
-                  tooltip="%command.task">
-                  <!-- TODO Uncomment this after updating/fixing LiderSourceProvider -->
-				  <!-- <visibleWhen>
-					   <and>
-			                <iterate operator="or">		
-			                	<or>
-							  	<with
-					                variable="tr.org.liderahenk.liderconsole.core.sourceproviders.main.isSearchSelected">
-						             <equals
-						                   value="true">
-						             </equals>
-					          	</with>
-					          	<with
-					                variable="tr.org.liderahenk.liderconsole.core.sourceproviders.main.isEntrySelected">
-						             <equals
-						                   value="true">
-						             </equals>
-					          	</with>
-					        	</or>
-					        </iterate>
-							<with
-				                variable="tr.org.liderahenk.liderconsole.core.sourceproviders.main.isAhenkSelected">
-				             	<equals
-					                   value="true">
-					            </equals>
-				          	</with>
-					    </and>
-					</visibleWhen> -->               
+                  commandId="tr.org.liderahenk.liderconsole.commands.ExecuteScriptTask"
+                  id="tr.org.liderahenk.liderconsole.commands.ExecuteScriptTask"
+                  tooltip="%command.execute.script.task"
+                  icon="icons/16/execute-script.png">
+				  	<visibleWhen>
+						<with
+			                variable="tr.org.liderahenk.liderconsole.core.sourceproviders.main.isAhenkSelected">
+			             	<equals
+				                   value="true">
+				            </equals>
+			          	</with>
+					</visibleWhen>
            		</command>
 		</menuContribution>
-  </extension>
+	</extension>
   
-	<!-- Add extension point contribution for "policy execution" dialogs -->
 	<extension
-  		point="tr.org.liderahenk.liderconsole.core.policymenu">
-  		<policyItem label="%command.profile" pluginName="script" pluginVersion="1.0.0" profileCommandId="tr.org.liderahenk.liderconsole.commands.ScriptProfile" />
-  	</extension>
-  	
+		point="org.eclipse.ui.editors">
+		<editor
+	       class="tr.org.liderahenk.script.editors.ScriptDefinitionEditor"
+	       default="true"
+	       icon="icons/16/execute-script.png"
+	       id="tr.org.liderahenk.script.editors.ScriptDefinitionEditor"
+	       name="%editor.script.definition">
+		</editor>
+	</extension>
+  
 </plugin>
