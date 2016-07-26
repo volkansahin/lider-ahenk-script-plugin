@@ -34,11 +34,14 @@ public class ScriptFile implements Serializable {
 	@Column(name = "SCRIPT_FILE_ID", unique = true, nullable = false)
 	private Long id;
 
-	@Column(name = "SCRIPT_TYPE", length = 1)
+	@Column(name = "SCRIPT_TYPE", length = 1, nullable = false)
 	private Integer scriptType;
 
+	@Column(name = "LABEL", nullable = false, length = 255)
+	private String label;
+
 	@Lob
-	@Column(name = "CONTENTS")
+	@Column(name = "CONTENTS", nullable = false)
 	private String contents;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -52,9 +55,10 @@ public class ScriptFile implements Serializable {
 	public ScriptFile() {
 	}
 
-	public ScriptFile(Long id, ScriptType scriptType, String contents, Date createDate, Date modifyDate) {
+	public ScriptFile(Long id, ScriptType scriptType, String label, String contents, Date createDate, Date modifyDate) {
 		this.id = id;
 		setScriptType(scriptType);
+		this.label = label;
 		this.contents = contents;
 		this.createDate = createDate;
 		this.modifyDate = modifyDate;
@@ -78,6 +82,14 @@ public class ScriptFile implements Serializable {
 		} else {
 			this.scriptType = scriptType.getId();
 		}
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	public String getContents() {

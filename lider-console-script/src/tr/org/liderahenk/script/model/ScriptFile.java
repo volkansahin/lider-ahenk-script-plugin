@@ -19,6 +19,8 @@ public class ScriptFile implements Serializable {
 
 	private ScriptType scriptType;
 
+	private String label;
+
 	private String contents;
 
 	private Date createDate;
@@ -28,9 +30,10 @@ public class ScriptFile implements Serializable {
 	public ScriptFile() {
 	}
 
-	public ScriptFile(Long id, ScriptType scriptType, String contents, Date createDate, Date modifyDate) {
+	public ScriptFile(Long id, ScriptType scriptType, String label, String contents, Date createDate, Date modifyDate) {
 		this.id = id;
 		this.scriptType = scriptType;
+		this.label = label;
 		this.contents = contents;
 		this.createDate = createDate;
 		this.modifyDate = modifyDate;
@@ -50,6 +53,14 @@ public class ScriptFile implements Serializable {
 
 	public void setScriptType(ScriptType scriptType) {
 		this.scriptType = scriptType;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	public String getContents() {
