@@ -45,7 +45,7 @@ public class ScriptFile implements Serializable {
 	private String contents;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "CREATE_DATE", nullable = false)
+	@Column(name = "CREATE_DATE", nullable = false, updatable = false)
 	private Date createDate;
 
 	@Temporal(TemporalType.TIMESTAMP)

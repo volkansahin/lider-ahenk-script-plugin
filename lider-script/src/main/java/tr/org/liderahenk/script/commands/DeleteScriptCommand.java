@@ -32,7 +32,7 @@ public class DeleteScriptCommand implements ICommand {
 	@Override
 	public ICommandResult execute(ICommandContext context) throws Exception {
 		ITaskRequest request = context.getRequest();
-		Long scriptId = (Long) request.getParameterMap().get("SCRIPT_FILE_ID");
+		Long scriptId = new Long(request.getParameterMap().get("SCRIPT_FILE_ID").toString());
 		dbService.delete(ScriptFile.class, scriptId);
 		logger.info("Deleted script file with ID: {}.", scriptId);
 		return resultFactory.create(CommandResultStatus.OK, new ArrayList<String>(), this);

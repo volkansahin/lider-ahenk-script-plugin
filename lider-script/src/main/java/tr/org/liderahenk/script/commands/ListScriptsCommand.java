@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,9 @@ public class ListScriptsCommand implements ICommand {
 		List<ScriptFile> scripts = dbService.findAll(ScriptFile.class);
 		logger.info("Found script files. Size: {}.", scripts != null ? scripts.size() : "0");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("SCRIPTS", scripts);
+		if (scripts != null && !scripts.isEmpty()) {
+			resultMap.put("SCRIPTS", new ObjectMapper().writeValueAsString(scripts));
+		}
 		return resultFactory.create(CommandResultStatus.OK, new ArrayList<String>(), this, resultMap);
 	}
 

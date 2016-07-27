@@ -1,11 +1,22 @@
 package tr.org.liderahenk.script.editors;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
@@ -29,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import tr.org.liderahenk.liderconsole.core.constants.LiderConstants;
 import tr.org.liderahenk.liderconsole.core.editorinput.DefaultEditorInput;
+import tr.org.liderahenk.liderconsole.core.rest.requests.TaskRequest;
 import tr.org.liderahenk.liderconsole.core.rest.responses.IResponse;
 import tr.org.liderahenk.liderconsole.core.rest.utils.TaskRestUtils;
 import tr.org.liderahenk.liderconsole.core.utils.SWTResourceManager;
@@ -158,7 +170,11 @@ public class ScriptDefinitionEditor extends EditorPart {
 					return;
 				}
 				try {
-					// TODO delete by getSelectedScript().getId()
+					Map<String, Object> parameterMap = new HashMap<String, Object>();
+					parameterMap.put("SCRIPT_FILE_ID", getSelectedScript().getId());
+					TaskRequest task = new TaskRequest(null, null, ScriptConstants.PLUGIN_NAME,
+							ScriptConstants.PLUGIN_VERSION, "DELETE_SCRIPT", parameterMap, null, new Date());
+					TaskRestUtils.execute(task);
 					refresh();
 				} catch (Exception e1) {
 					logger.error(e1.getMessage(), e1);
@@ -197,7 +213,35 @@ public class ScriptDefinitionEditor extends EditorPart {
 
 		createTableFilterArea(parent);
 
-		// TODO
+		tableViewer = SWTResourceManager.createTableViewer(parent);
+		createTableColumns();
+		populateTable();
+
+		// Hook up listeners
+		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
+				Object firstElement = selection.getFirstElement();
+				if (firstElement instanceof ScriptFile) {
+					setSelectedScript((ScriptFile) firstElement);
+				}
+				btnEditScript.setEnabled(true);
+				btnDeleteScript.setEnabled(true);
+			}
+		});
+		tableViewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				ScriptDefinitionDialog dialog = new ScriptDefinitionDialog(parent.getShell(), getSelectedScript(),
+						getSelf());
+				dialog.open();
+			}
+		});
+
+		tableFilter = new TableFilter();
+		tableViewer.addFilter(tableFilter);
+		tableViewer.refresh();
 	}
 
 	/**
@@ -252,6 +296,68 @@ public class ScriptDefinitionEditor extends EditorPart {
 		}
 	}
 
+	/**
+	 * Create table columns related to policy database columns.
+	 * 
+	 */
+	private void createTableColumns() {
+
+		// Type
+		TableViewerColumn typeColumn = SWTResourceManager.createTableViewerColumn(tableViewer,
+				Messages.getString("SCRIPT_TYPE"), 100);
+		typeColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if (element instanceof ScriptFile) {
+					return ((ScriptFile) element).getScriptType().getMessage();
+				}
+				return Messages.getString("UNTITLED");
+			}
+		});
+
+		// Label
+		TableViewerColumn labelColumn = SWTResourceManager.createTableViewerColumn(tableViewer,
+				Messages.getString("SCRIPT_LABEL"), 300);
+		labelColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if (element instanceof ScriptFile) {
+					return ((ScriptFile) element).getLabel();
+				}
+				return Messages.getString("UNTITLED");
+			}
+		});
+
+		// Create date
+		TableViewerColumn createDateColumn = SWTResourceManager.createTableViewerColumn(tableViewer,
+				Messages.getString("CREATE_DATE"), 150);
+		createDateColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if (element instanceof ScriptFile) {
+					return ((ScriptFile) element).getCreateDate() != null
+							? ((ScriptFile) element).getCreateDate().toString() : Messages.getString("UNTITLED");
+				}
+				return Messages.getString("UNTITLED");
+			}
+		});
+
+		// Modify date
+		TableViewerColumn modifyDateColumn = SWTResourceManager.createTableViewerColumn(tableViewer,
+				Messages.getString("MODIFY_DATE"), 150);
+		modifyDateColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if (element instanceof ScriptFile) {
+					return ((ScriptFile) element).getModifyDate() != null
+							? ((ScriptFile) element).getModifyDate().toString() : Messages.getString("UNTITLED");
+				}
+				return Messages.getString("UNTITLED");
+			}
+		});
+
+	}
+
 	@Override
 	public void setFocus() {
 		btnAddScript.setFocus();
@@ -263,15 +369,15 @@ public class ScriptDefinitionEditor extends EditorPart {
 	 */
 	private void populateTable() {
 		try {
-			// TODO test!!!
 			IResponse response = TaskRestUtils.execute(ScriptConstants.PLUGIN_NAME, ScriptConstants.PLUGIN_VERSION,
 					"LIST_SCRIPTS");
+			List<ScriptFile> scripts = null;
 			if (response != null && response.getResultMap() != null && response.getResultMap().get("SCRIPTS") != null) {
-				List<ScriptFile> scripts = new ObjectMapper().readValue(
-						response.getResultMap().get("SCRIPTS").toString(), new TypeReference<List<ScriptFile>>() {
+				scripts = new ObjectMapper().readValue(response.getResultMap().get("SCRIPTS").toString(),
+						new TypeReference<List<ScriptFile>>() {
 						});
-				tableViewer.setInput(scripts);
 			}
+			tableViewer.setInput(scripts != null ? scripts : new ArrayList<ScriptFile>());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			Notifier.error(null, Messages.getString("ERROR_ON_LIST"));

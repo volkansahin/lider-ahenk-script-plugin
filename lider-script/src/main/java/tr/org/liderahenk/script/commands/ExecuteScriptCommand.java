@@ -1,13 +1,20 @@
 package tr.org.liderahenk.script.commands;
 
 import java.util.ArrayList;
+import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import tr.org.liderahenk.lider.core.api.persistence.IPluginDbService;
 import tr.org.liderahenk.lider.core.api.plugin.ICommand;
 import tr.org.liderahenk.lider.core.api.plugin.IPluginInfo;
+import tr.org.liderahenk.lider.core.api.rest.requests.ITaskRequest;
 import tr.org.liderahenk.lider.core.api.service.ICommandContext;
 import tr.org.liderahenk.lider.core.api.service.ICommandResult;
 import tr.org.liderahenk.lider.core.api.service.ICommandResultFactory;
 import tr.org.liderahenk.lider.core.api.service.enums.CommandResultStatus;
+import tr.org.liderahenk.script.entities.ScriptFile;
 
 /**
  * Task handler for executing scripts.
@@ -17,17 +24,32 @@ import tr.org.liderahenk.lider.core.api.service.enums.CommandResultStatus;
  */
 public class ExecuteScriptCommand implements ICommand {
 
+	private Logger logger = LoggerFactory.getLogger(ExecuteScriptCommand.class);
+
 	private ICommandResultFactory resultFactory;
 	private IPluginInfo pluginInfo;
+	private IPluginDbService dbService;
 
 	@Override
 	public ICommandResult execute(ICommandContext context) throws Exception {
+
+		ITaskRequest request = context.getRequest();
+		Map<String, Object> parameterMap = request.getParameterMap();
+
+		// Find script file
+		Long scriptId = new Long(parameterMap.get("SCRIPT_FILE_ID").toString());
+		ScriptFile script = dbService.find(ScriptFile.class, scriptId);
+		logger.info("Found script file with ID: {}", scriptId);
+
+		// Add contents and type to parameter map
+		parameterMap.put("SCRIPT_CONTENTS", script.getContents());
+		parameterMap.put("SCRIPT_TYPE", script.getScriptType().toString());
+
 		return resultFactory.create(CommandResultStatus.OK, new ArrayList<String>(), this);
 	}
 
 	@Override
 	public ICommandResult validate(ICommandContext context) {
-		// TODO validate script, check syntax!
 		return resultFactory.create(CommandResultStatus.OK, null, this, null);
 	}
 
@@ -57,6 +79,10 @@ public class ExecuteScriptCommand implements ICommand {
 
 	public void setPluginInfo(IPluginInfo pluginInfo) {
 		this.pluginInfo = pluginInfo;
+	}
+
+	public void setDbService(IPluginDbService dbService) {
+		this.dbService = dbService;
 	}
 
 }

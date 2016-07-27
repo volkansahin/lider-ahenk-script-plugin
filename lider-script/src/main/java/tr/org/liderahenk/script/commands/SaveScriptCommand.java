@@ -38,7 +38,11 @@ public class SaveScriptCommand implements ICommand {
 		ObjectMapper mapper = new ObjectMapper();
 		ScriptFile script = mapper.readValue(mapper.writeValueAsBytes(request.getParameterMap().get("SCRIPT")),
 				ScriptFile.class);
-		dbService.save(script);
+		if (script.getId() != null) {
+			dbService.update(script);
+		} else {
+			dbService.save(script);
+		}
 		logger.info("Saved script file with ID: {}", script.getId());
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("SCRIPT", script);

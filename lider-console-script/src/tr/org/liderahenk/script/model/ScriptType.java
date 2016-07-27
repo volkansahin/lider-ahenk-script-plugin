@@ -1,5 +1,7 @@
 package tr.org.liderahenk.script.model;
 
+import tr.org.liderahenk.script.i18n.Messages;
+
 /**
  * This enum is used to indicate script file type.
  * 
@@ -40,6 +42,15 @@ public enum ScriptType {
 			}
 		}
 		throw new IllegalArgumentException("No matching type for id: " + id);
+	}
+
+	/**
+	 * Provide i18n message representation of the enum type.
+	 * 
+	 * @return
+	 */
+	public String getMessage() {
+		return Messages.getString(this.toString());
 	}
 
 }
