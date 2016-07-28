@@ -6,6 +6,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -96,9 +98,24 @@ public class ScriptDefinitionDialog extends DefaultLiderDialog {
 				selected = true;
 			}
 		}
-		if (!selected) {
-			cmbType.select(0);
-		}
+		cmbType.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (getSelectedType() == ScriptType.BASH) {
+					txtContents.setText(ScriptConstants.TEMPLATES.BASH);
+				} else if (getSelectedType() == ScriptType.PERL) {
+					txtContents.setText(ScriptConstants.TEMPLATES.PERL);
+				} else if (getSelectedType() == ScriptType.RUBY) {
+					txtContents.setText(ScriptConstants.TEMPLATES.RUBY);
+				} else if (getSelectedType() == ScriptType.PYTHON) {
+					txtContents.setText(ScriptConstants.TEMPLATES.PYTHON);
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
 
 		// Contents
 		Label lblContents = new Label(composite, SWT.NONE);
@@ -111,6 +128,11 @@ public class ScriptDefinitionDialog extends DefaultLiderDialog {
 		txtContents.setLayoutData(gridData);
 		if (selectedScript != null && selectedScript.getContents() != null) {
 			txtContents.setText(selectedScript.getContents());
+		}
+
+		if (!selected) {
+			cmbType.select(0);
+			txtContents.setText(ScriptConstants.TEMPLATES.BASH);
 		}
 
 		applyDialogFont(composite);
