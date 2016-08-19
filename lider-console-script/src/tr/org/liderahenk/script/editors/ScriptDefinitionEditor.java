@@ -173,7 +173,7 @@ public class ScriptDefinitionEditor extends EditorPart {
 					Map<String, Object> parameterMap = new HashMap<String, Object>();
 					parameterMap.put("SCRIPT_FILE_ID", getSelectedScript().getId());
 					TaskRequest task = new TaskRequest(null, null, ScriptConstants.PLUGIN_NAME,
-							ScriptConstants.PLUGIN_VERSION, "DELETE_SCRIPT", parameterMap, null, new Date());
+							ScriptConstants.PLUGIN_VERSION, "DELETE_SCRIPT", parameterMap, null, null, new Date());
 					TaskRestUtils.execute(task);
 					refresh();
 				} catch (Exception e1) {

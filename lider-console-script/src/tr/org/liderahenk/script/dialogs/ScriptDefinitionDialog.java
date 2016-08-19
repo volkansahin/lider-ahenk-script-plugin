@@ -175,7 +175,7 @@ public class ScriptDefinitionDialog extends DefaultLiderDialog {
 		Map<String, Object> parameterMap = new HashMap<String, Object>();
 		parameterMap.put("SCRIPT", script);
 		TaskRequest task = new TaskRequest(null, null, ScriptConstants.PLUGIN_NAME, ScriptConstants.PLUGIN_VERSION,
-				"SAVE_SCRIPT", parameterMap, null, new Date());
+				"SAVE_SCRIPT", parameterMap, null, null, new Date());
 		logger.debug("Script request: {}", task);
 
 		try {
