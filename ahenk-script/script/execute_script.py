@@ -3,8 +3,6 @@
 # Author: Emre Akkaya <emre.akkaya@agem.com.tr>
 
 from base.plugin.abstract_plugin import AbstractPlugin
-from base.system.system import System
-from base.model.enum.ContentType import ContentType
 import json
 
 
@@ -49,19 +47,19 @@ class ExecuteScript(AbstractPlugin):
                 self.context.create_response(code=self.message_code.TASK_ERROR.value,
                                              message='Betik çalıştırılırken hata oluştu',
                                              data=json.dumps({'Result': p_err}),
-                                             content_type=ContentType.APPLICATION_JSON.value)
+                                             content_type=self.get_content_type().APPLICATION_JSON.value)
             else:
                 self.logger.debug("[SCRIPT] Executed script file.")
                 self.context.create_response(code=self.message_code.TASK_PROCESSED.value,
                                              message='Betik başarıyla çalıştırıldı.',
                                              data=json.dumps({'Result': p_out}),
-                                             content_type=ContentType.APPLICATION_JSON.value)
+                                             content_type=self.get_content_type().APPLICATION_JSON.value)
 
         except Exception as e:
             self.logger.error(str(e))
             self.context.create_response(code=self.message_code.TASK_ERROR.value,
                                          message='Betik çalıştırılırken hata oluştu:' + str(e),
-                                         content_type=ContentType.APPLICATION_JSON.value)
+                                         content_type=self.get_content_type().APPLICATION_JSON.value)
 
     def create_script_file(self, file_path, script_contents):
         self.logger.debug("[SCRIPT] Creating script file.")
