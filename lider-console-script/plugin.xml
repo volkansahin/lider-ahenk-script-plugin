@@ -92,5 +92,12 @@
 	       name="%editor.script.definition">
 		</editor>
 	</extension>
+	
+	<!-- Add extension point contribution for i18n messages -->
+	<extension
+  		point="tr.org.liderahenk.liderconsole.core.i18n">
+  		<task code="execute_script" label="%command.execute.script.task" />
+		<plugin name="script" label="%plugin.label" />
+  	</extension>
   
 </plugin>
