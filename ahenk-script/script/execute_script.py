@@ -43,13 +43,13 @@ class ExecuteScript(AbstractPlugin):
 
             result_code, p_out, p_err = self.execute_script_file(command, file_path, script_params)
             if result_code != 0:
-                self.logger.error("[SCRIPT] Error occurred while executing script: " + str(p_err))
+                self.logger.error("Error occurred while executing script: " + str(p_err))
                 self.context.create_response(code=self.message_code.TASK_ERROR.value,
                                              message='Betik çalıştırılırken hata oluştu',
                                              data=json.dumps({'Result': p_err}),
                                              content_type=self.get_content_type().APPLICATION_JSON.value)
             else:
-                self.logger.debug("[SCRIPT] Executed script file.")
+                self.logger.debug("Executed script file.")
                 self.context.create_response(code=self.message_code.TASK_PROCESSED.value,
                                              message='Betik başarıyla çalıştırıldı.',
                                              data=json.dumps({'Result': p_out}),
@@ -62,16 +62,16 @@ class ExecuteScript(AbstractPlugin):
                                          content_type=self.get_content_type().APPLICATION_JSON.value)
 
     def create_script_file(self, file_path, script_contents):
-        self.logger.debug("[SCRIPT] Creating script file.")
+        self.logger.debug("Creating script file.")
         # Create temporary script file with the provided content
         self.write_file(file_path, script_contents)
 
         # Make the file executable
         self.make_executable(file_path)
-        self.logger.debug("[SCRIPT] Created script file: {0}".format(file_path))
+        self.logger.debug("Created script file: {0}".format(file_path))
 
     def execute_script_file(self, command, file_path, script_params):
-        self.logger.debug("[SCRIPT] Executing script file.")
+        self.logger.debug("Executing script file.")
         # Execute the file
         if not script_params:
             return self.execute('{0} {1}'.format(command, file_path))
