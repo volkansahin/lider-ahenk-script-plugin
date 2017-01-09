@@ -26,7 +26,7 @@
 		<log4j.version>1.2.17</log4j.version>
 		<slf4j.version>1.6.1</slf4j.version>
 		<lider.ahenk.version>1.0.0-SNAPSHOT</lider.ahenk.version>
-		<jackson.version>1.9.13</jackson.version>
+		<jackson.version>2.8.5</jackson.version>
 		<aries.blueprint.version>1.1.0</aries.blueprint.version>
 		<tycho.version>0.25.0</tycho.version>
 		<geronimo.jpa.version>1.1</geronimo.jpa.version>
@@ -172,13 +172,18 @@
 				<version>${lider.ahenk.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-core-asl</artifactId>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
 				<version>${jackson.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-mapper-asl</artifactId>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
 				<version>${jackson.version}</version>
 			</dependency>
 			<dependency>

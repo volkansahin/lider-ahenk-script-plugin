@@ -24,19 +24,9 @@
 <features name="${project.artifactId}-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0">
 
     <feature name="lider-script" version="${project.version}">
-        <feature>lider-script-dependencies</feature>
-       	<feature>lider-script-bundles</feature>
-    </feature>
-
-    <feature name="lider-script-bundles" version="${project.version}">
+		<configfile finalname="/etc/tr.org.liderahenk.script.cfg">mvn:tr.org.liderahenk/lider-script/${project.version}/cfg</configfile>
 		<bundle>mvn:tr.org.liderahenk/lider-script/${project.version}</bundle>
 		<bundle>mvn:tr.org.liderahenk/lider-script-db/${project.version}</bundle>
-		<configfile finalname="/etc/tr.org.liderahenk.script.cfg">mvn:tr.org.liderahenk/lider-script/${project.version}/cfg</configfile>
-    </feature>
-
-    <feature name="lider-script-dependencies" version="${project.version}">
-		<bundle>mvn:org.codehaus.jackson/jackson-core-asl/1.9.13</bundle>
-		<bundle>mvn:org.codehaus.jackson/jackson-mapper-asl/1.9.13</bundle>
     </feature>
 
 </features>

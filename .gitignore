@@ -12,6 +12,8 @@ workspace/**
 *.changes
 ahenk-script/debian/ahenk-script/
 ahenk-script/debian/ahenk-script/**
+ahenk-script/debian/debhelper-build-stamp
+ahenk-script/debian/files
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tr.org.liderahenk.lider.core.api.persistence.IPluginDbService;
 import tr.org.liderahenk.lider.core.api.plugin.ICommand;
