@@ -2,20 +2,21 @@
 # -*- coding: utf-8 -*-
 # Author: Emre Akkaya <emre.akkaya@agem.com.tr>
 
-from base.plugin.abstract_plugin import AbstractPlugin
+from service.plugin.abstract_plugin import AbstractPlugin
 import json
+import os
 
 
 class ExecuteScript(AbstractPlugin):
     def __init__(self, data, context):
-        super(AbstractPlugin, self).__init__()
+        # super(AbstractPlugin, self).__init__()
         self.data = data
         self.context = context
         self.logger = self.get_logger()
         self.message_code = self.get_message_code()
 
         self.temp_file_name = str(self.generate_uuid())
-        self.base_file_path = '{0}{1}'.format(str(self.Ahenk.received_dir_path()), self.temp_file_name)
+        self.base_file_path = os.path.join(self.Ahenk.received_dir_path(), self.temp_file_name)
 
     def handle_task(self):
         try:
